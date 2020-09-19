@@ -38,22 +38,22 @@ public:
         
         int res = 0;
 
-        for (int sr = 0; sr < rows; sr++) {
-            for (int er = sr; er < rows; er++) {
+        for (int sr = 0; sr < rows; sr++) {    
+            for (int er = sr; er < rows; er++) {    // sr为起始行 er为终止行
                 int total = 0;
                 unordered_map<int, int> d;
 
                 for (int c = 0; c < cols; c++) {
                     int pre = sr < 1 ? 0 : sums[sr - 1][c];
-                    total += sums[er][c] - pre;
+                    total += sums[er][c] - pre;   // total为子数组元素和  一列一列累加
 
                     if (total == target)
                         res++;
 
-                    if (d.count(total - target))
+                    if (d.count(total - target))   // 子数组和为target情况 参考560
                         res += d[total - target];
 
-                    d[total] += 1;
+                    d[total] += 1;    // 记录
                 }
             }
         }

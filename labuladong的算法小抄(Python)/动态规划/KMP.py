@@ -19,14 +19,14 @@ class KMP:
     def __init__(self, pat: str):
         self.__pat = pat
         M = len(pat)
-        # dp[状态][字符] = 下一个状态
-        self.__dp = [[[0] * 256] for i in range(M)]
+        # dp[状态][字符] = 下一个状态  通过已知的状态和遇到的字符推出下一个状态
+        self.__dp = [[0 for j in range(256)] for i in range(M)]
         # base case
         self.__dp[0][int(pat[0])] = 1
         # 影子状态 X 初始为 0
         X = 0
         # 构建状态转移图
-        for j in range(1, M):
+        for j in range(1, M):# 每个状态遇到每个字符转移到下一个状态
             for c in range(256):
                 self.__dp[j][c] = self.__dp[X][c]
             self.__dp[j][int(pat[j])] = j + 1
@@ -38,6 +38,7 @@ class KMP:
         N = len(txt)
         # pat的初始状态为0
         j = 0
+        
         for i in range(N):
             # 计算pat的下一个状态
             j = self.__dp[j][int(txt[i])]

@@ -137,3 +137,41 @@ public:
 
     }
 };
+
+// 带备忘录的递归 或者说dp
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        _s = s;
+        _p = p;
+        _dp = vector<vector<int>>(s.length() + 1, vector<int>(p.length() + 1, 0));
+        return dp(0, 0);
+    }
+
+private:
+    string _s;
+    string _p;
+    vector<vector<int>> _dp;   // 0表示未计算 1表示true 2表示false
+    bool dp(int i, int j) {
+        if (_dp[i][j] != 0)
+            return _dp[i][j] == 1;
+        if (j == _p.length())
+            return i == _s.length();
+        bool first = i < _s.length() && (_p[j] == _s[i] || _p[j] == '.');
+        bool ans;
+        if (j <= _p.length() - 2 && _p[j + 1] == '*') {
+            ans = dp(i, j + 2) || (first && dp(i + 1, j));
+        }
+        else {
+            ans = first && dp(i + 1, j + 1);
+        }
+
+        _dp[i][j] = ans ? 1 : 2;
+        return ans;
+    }
+};
+/*
+执行结果：通过 显示详情
+执行用时：8 ms, 在所有 C++ 提交中击败了81.70%的用户
+内存消耗：6.9 MB, 在所有 C++ 提交中击败了45.22%的用户
+*/

@@ -1,0 +1,54 @@
+"""
+886
+
+给定一组 N 人（编号为 1, 2, ..., N）， 我们想把每个人分进任意大小的两组。
+
+每个人都可能不喜欢其他人，那么他们不应该属于同一组。
+
+形式上，如果 dislikes[i] = [a, b]，表示不允许将编号为 a 和 b 的人归入同一组。
+
+当可以用这种方法将所有人分进两组时，返回 true；否则返回 false。
+
+二分图应用
+dislikes[i] = [a, b] 表示a b两个点连着 不能涂同一种颜色
+
+"""
+
+class Solution:
+    def possibleBipartition(self, N: int, dislikes: List[List[int]]) -> bool:
+        graph = [[] for _ in range(N)]
+        for side in dislikes:# 根据边的情况创建图的邻接表
+            graph[side[0] - 1].append(side[1] - 1)
+            graph[side[1] - 1].append(side[0] - 1)
+        
+        # 二分图的判断
+        visited = [0] * (len(graph))
+        ans = True
+        # 使用0表示未访问
+        # 使用1  2表示二分图两种节点
+        # DFS
+        def traverse(p: int, i: int):
+            nonlocal visited, ans, graph
+            if visited[i] != 0:
+                if visited[i] == visited[p]:
+                    ans = False
+                return None
+            else:
+                if p == -1:
+                    visited[i] = 1
+                else:
+                    visited[i] = 2 if visited[p] == 1 else 1
+                for j in range(len(graph[i])):
+                    traverse(i, graph[i][j])                                
+        
+        for i in range(len(graph)):
+            if visited[i] == 0:
+                traverse(-1, i)
+        
+        return ans
+"""
+执行结果：通过 显示详情
+执行用时：216 ms, 在所有 Python3 提交中击败了43.70%的用户
+内存消耗：19.8 MB, 在所有 Python3 提交中击败了52.15%的用户
+"""
+

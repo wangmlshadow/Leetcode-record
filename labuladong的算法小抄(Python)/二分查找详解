@@ -1,0 +1,57 @@
+# 寻找一个数 基本二分搜索
+def binarySearch(nums: List[int], target: int) -> int:
+    # [left, right]
+    left = 0
+    right = len(nums) - 1# 注意
+    
+    while left <= right:
+        mid = (right + left) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+    
+# 寻找左侧边界的二分搜索
+# 存在重复元素
+# 避免了再找到第一个target后的左右线性查找
+def left_bound(nums: List[int], target: int) -> int:
+    if len(nums) == 0:
+        return -1
+    # [left, right)
+    left = 0
+    right = len(nums)# 注意
+    
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            right = mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid# 注意
+    # target比所有数都大
+    if left == len(nums):
+        return -1
+    
+    return left if nums[left] == target else -1
+
+
+# 寻找右侧边界的二分查找
+def right_bound(nums: List[int], target: int):
+    if len(nums) == 0:
+        return -1
+    left = 0
+    right = len(nums)
+    
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            left = mid + 1# 注意
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid
+    return left - 1# mid = left - 1
